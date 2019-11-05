@@ -30,4 +30,40 @@ router.post("/", async (req, res) => {
     .catch(err => res.status(400).send(err.name + ": " + err.errmsg)); // Catches duplicate rollno errors
 });
 
+router.put("/:id", async (req, res) => {
+  //validate student
+  const result = validateStudent(req.body);
+  if (result.error) return res.status(400).send("Invalid Student");
+
+  //check if student exists
+  const student = await Student.findById(req.params.id).catch(err =>
+    console.log(err)
+  );
+  if (!student) res.status(404).send("Student does not exist");
+
+  //update
+  student.name = req.body.name;
+  if (student.rollno != req.body.rollno) student.rollno = req.body.name;
+  student.class = req.body.class;
+  student.phone = req.body.phone;
+  student.address = req.body.address;
+  const updatedStud = await student
+    .save()
+    .then(() => res.send(updatedStud))
+    .catch(err => {
+      console.log(err);
+      res.status(400).send(err.name + ": " + err.errmsg);
+    });
+});
+
+router.delete("/:id", async (req, res) => {
+  //check if id exists
+  const student = await Student.findByIdAndDelete(req.params.id).catch(err => {
+    console.log(err);
+    res.status(400).send(err.name + ": " + err.errmsg);
+  });
+
+  if (!student) return res.status(404).send("Student does not exist");
+  res.send(student);
+});
 module.exports = router;
