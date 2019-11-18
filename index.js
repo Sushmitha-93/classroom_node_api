@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const students = require("./routes/students");
+const cors = require("cors");
 
 // Connect to Mongo DB
 mongoose
@@ -10,6 +11,10 @@ mongoose
 
 // 1) Create server instance
 const app = express();
+
+//express middleware to apply a Access-Control-Allow-Origin: * header to every response from the server.
+// I think it should be meant only for development
+app.use(cors());
 
 // 2) Add middlewares to server instance
 app.use(express.json()); // built-in middleware to parse JSON request payloads to req.body object

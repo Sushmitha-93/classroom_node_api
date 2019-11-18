@@ -7,6 +7,15 @@ router.get("/", async (req, res) => {
   res.send(students);
 });
 
+router.get("/:id", async (req, res) => {
+  const student = await Student.findById(req.params.id).catch(err => {
+    console.log(error);
+    res.status(400).send(err.name + ": " + err.errmsg);
+  });
+  if (!student) return res.status(404).send("Student does not exist");
+  res.send(student);
+});
+
 router.post("/", async (req, res) => {
   // validate request body
   // check if student roll id exists.. NOT NEEDED because unique property in mongoose schema gives error.
@@ -43,7 +52,7 @@ router.put("/:id", async (req, res) => {
 
   //update
   student.name = req.body.name;
-  if (student.rollno != req.body.rollno) student.rollno = req.body.name;
+  if (student.rollno !== req.body.rollno) student.rollno = req.body.name;
   student.class = req.body.class;
   student.phone = req.body.phone;
   student.address = req.body.address;
