@@ -10,7 +10,7 @@ const studentSchema = mongoose.Schema({
   name: {
     type: String,
     required: true,
-    minlength: 4,
+    minlength: 2,
     maxlength: 25
   },
   rollno: {
@@ -18,7 +18,7 @@ const studentSchema = mongoose.Schema({
     unique: true,
     required: true,
     min: 1,
-    max: 100
+    max: 200
   },
   class: {
     type: String,
@@ -38,7 +38,7 @@ const studentSchema = mongoose.Schema({
   },
   address: {
     type: String,
-    maxlength: 100
+    maxlength: 500
   }
 });
 
@@ -50,12 +50,12 @@ function validateStudent(student) {
     name: joi
       .string()
       .required()
-      .min(4)
+      .min(2)
       .max(25),
     rollno: joi
       .number()
       .min(1)
-      .max(100)
+      .max(200)
       .required(),
     class: joi
       .string()
@@ -66,7 +66,7 @@ function validateStudent(student) {
       .length(10)
       .required(),
     gender: joi.string().required(),
-    address: joi.string().max(100)
+    address: joi.string().max(500)
   });
   return schema.validate(student);
 }

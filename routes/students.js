@@ -52,17 +52,15 @@ router.put("/:id", async (req, res) => {
 
   //update
   student.name = req.body.name;
-  if (student.rollno !== req.body.rollno) student.rollno = req.body.name;
+  if (student.rollno !== req.body.rollno) student.rollno = req.body.rollno;
   student.class = req.body.class;
   student.phone = req.body.phone;
   student.address = req.body.address;
-  const updatedStud = await student
-    .save()
-    .then(() => res.send(updatedStud))
-    .catch(err => {
-      console.log(err);
-      res.status(400).send(err.name + ": " + err.errmsg);
-    });
+  const updatedStud = await student.save().catch(err => {
+    console.log(err);
+    res.status(400).send(err.name + ": " + err.errmsg);
+  });
+  res.send(updatedStud);
 });
 
 router.delete("/:id", async (req, res) => {

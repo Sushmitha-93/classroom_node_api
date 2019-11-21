@@ -5,7 +5,11 @@ const cors = require("cors");
 
 // Connect to Mongo DB
 mongoose
-  .connect("mongodb://localhost/classroom", { useNewUrlParser: true })
+  //.connect("mongodb://localhost/classroom", { useNewUrlParser: true })
+  .connect(
+    "mongodb+srv://abcd1234:abcd1234@cluster0-absuk.mongodb.net/test?retryWrites=true&w=majority",
+    { useNewUrlParser: true }
+  )
   .then(() => console.log("Connected to Mongo DB"))
   .catch(err => console.log("Could not connect to Mongo DB ", err));
 
