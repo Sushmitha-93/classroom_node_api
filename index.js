@@ -26,5 +26,5 @@ app.use(express.json()); // built-in middleware to parse JSON request payloads t
 app.use("/api/students", students);
 
 // 3) Specify which port Listen for requests
-const port = process.env.port || 3000;
+const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening to port ${port}`));
