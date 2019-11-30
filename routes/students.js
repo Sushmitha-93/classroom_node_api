@@ -73,4 +73,5 @@ router.delete("/:id", async (req, res) => {
   if (!student) return res.status(404).send("Student does not exist");
   res.send(student);
 });
+
 module.exports = router;

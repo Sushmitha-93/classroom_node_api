@@ -1,0 +1,5 @@
+{
+  "_comment": "if NODE_ENV=test",
+  "_comment1": "Below URL is for mongodb already deployed on Atlas. You can use it, by setting it in env var 'classroom_db'. Its already mapped in custom-envionment-variables.json file in config ",
+  "db": "mongodb+srv://abcd1234:abcd1234@cluster0-absuk.mongodb.net/test?retryWrites=true&w=majority"
+}

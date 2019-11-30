@@ -1,0 +1,4 @@
+{
+  "_comment": "if NODE_ENV is not set and if env vars mapped in custom-environment-variables are not set",
+  "db": "mongodb://localhost/classroom"
+}

@@ -1,0 +1,7 @@
+{
+  "_comment": "This file maps config variables with environment variables set on machine.",
+  "_comment1": "Here, 'db' config variable is mapped with 'classroom_db' env variable.",
+  "_comment2": "So you need to create it using 'set', or else it will take the value from default.js",
+  "_comment3": "This way your db connection will remain secret from code base, stored in env var on machine",
+  "db": "classroom_db"
+}

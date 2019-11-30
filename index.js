@@ -2,15 +2,15 @@ const express = require("express");
 const mongoose = require("mongoose");
 const students = require("./routes/students");
 const cors = require("cors");
+const config = require("config");
 
 // Connect to Mongo DB
+const db = config.get("db");
+
 mongoose
   //.connect("mongodb://localhost/classroom", { useNewUrlParser: true })
-  .connect(
-    "mongodb+srv://abcd1234:abcd1234@cluster0-absuk.mongodb.net/test?retryWrites=true&w=majority",
-    { useNewUrlParser: true }
-  )
-  .then(() => console.log("Connected to Mongo DB"))
+  .connect(db, { useNewUrlParser: true })
+  .then(() => console.log("Connected to Mongo DB: ", db))
   .catch(err => console.log("Could not connect to Mongo DB ", err));
 
 // 1) Create server instance
