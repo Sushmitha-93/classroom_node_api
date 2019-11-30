@@ -9,7 +9,7 @@ const db = config.get("db");
 
 mongoose
   //.connect("mongodb://localhost/classroom", { useNewUrlParser: true })
-  .connect("mongodb://localhost/classroom", { useNewUrlParser: true })
+  .connect(db, { useNewUrlParser: true })
   .then(() => console.log("Connected to Mongo DB: ", db))
   .catch(err => console.log("Could not connect to Mongo DB ", err));
 
