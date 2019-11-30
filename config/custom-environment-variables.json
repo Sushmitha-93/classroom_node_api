@@ -3,5 +3,6 @@
   "_comment1": "Here, 'db' config variable is mapped with 'classroom_db' env variable.",
   "_comment2": "So you need to create it using 'set', or else it will take the value from default.js",
   "_comment3": "This way your db connection will remain secret from code base, stored in env var on machine",
+  "_comment4": "you can set this connection string to classroom_db - mongodb+srv://abcd1234:abcd1234@cluster0-absuk.mongodb.net/test?retryWrites=true&w=majority ...But dont mention this in real applications.",
   "db": "classroom_db"
 }
