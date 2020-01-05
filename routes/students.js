@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+const router = express.Router(); // remember to export this router
 const { Student, validateStudent } = require("../models/studentModel");
 
 router.get("/", async (req, res) => {
