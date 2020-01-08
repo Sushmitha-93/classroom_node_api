@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { User, validateUser } = require("../models/userModel");
+const bcrypt = require("bcryptjs");
 
 router.get("/", async (req, res) => {
   const users = await User.find();
@@ -16,11 +17,17 @@ router.post("/", async (req, res) => {
     email: req.body.email,
     password: req.body.password
   });
-
-  newUser = await newUser
-    .save()
-    .then(() => res.send(newUser))
-    .catch(err => res.status(400).send(err.name + " : " + err.message));
+  // Hasing password before saving in db
+  bcrypt.genSalt(10, function(err, salt) {
+    bcrypt.hash(newUser.password, salt, async function(err, hash) {
+      //console.log(hash);
+      newUser.password = hash;
+      newUser = await newUser
+        .save()
+        .then(() => res.send(newUser))
+        .catch(err => res.status(400).send(err.name + " : " + err.message));
+    });
+  });
 });
 
 router.get("/:id", async (req, res) => {

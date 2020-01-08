@@ -19,7 +19,7 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 100
+    maxlength: 1024
   }
 });
 
@@ -43,7 +43,7 @@ function validateUser(user) {
       .string()
       .required()
       .min(5)
-      .max(100)
+      .max(1024)
   });
 
   return schema.validate(user);
