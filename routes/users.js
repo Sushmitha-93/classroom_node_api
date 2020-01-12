@@ -18,16 +18,13 @@ router.post("/", async (req, res) => {
     password: req.body.password
   });
   // Hasing password before saving in db
-  bcrypt.genSalt(10, function(err, salt) {
-    bcrypt.hash(newUser.password, salt, async function(err, hash) {
-      //console.log(hash);
-      newUser.password = hash;
-      newUser = await newUser
-        .save()
-        .then(() => res.send(newUser))
-        .catch(err => res.status(400).send(err.name + " : " + err.message));
-    });
-  });
+  const salt = await bcrypt.genSalt(10);
+  newUser.password = await bcrypt.hash(newUser.password, salt); // returns hashed password
+
+  newUser = await newUser
+    .save()
+    .then(() => res.send(newUser))
+    .catch(err => res.status(400).send(err.name + " : " + err.message));
 });
 
 router.get("/:id", async (req, res) => {
@@ -53,8 +50,16 @@ router.put("/:id", async (req, res) => {
   // Update user in db
   user.username = req.body.username;
   if (user.email != req.body.email) user.email = req.body.email;
-  user.password = req.body.password;
+  const compare = await bcrypt.compare(req.body.password, user.password);
+  console.log(compare);
 
+  let salt = "";
+
+  if (!compare) {
+    salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(req.body.password, salt);
+    console.log(user.password);
+  }
   const updatedUser = await user.save().catch(err => {
     console.log(err);
     res.status(500).send(err.name + " : " + err.message);
