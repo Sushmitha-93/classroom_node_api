@@ -8,7 +8,9 @@ router.get("/", async (req, res) => {
   res.send(users);
 });
 
+// ** used for first time user SIGN UP requests **
 router.post("/", async (req, res) => {
+  // 1) Validate request received
   const result = validateUser(req.body);
   if (result.error) return res.status(400).send("Invalid user information");
 
@@ -17,14 +19,26 @@ router.post("/", async (req, res) => {
     email: req.body.email,
     password: req.body.password
   });
-  // Hasing password before saving in db
+  // 2) Hashing password before saving in db
   const salt = await bcrypt.genSalt(10);
   newUser.password = await bcrypt.hash(newUser.password, salt); // returns hashed password
 
+  // 3) Save/insert new user in db 
+  //      if save OK - send JWT taken in response Header, and new user saved in response Body
+  //      else send 400 error - (because user already exist)
   newUser = await newUser
     .save()
-    .then(() => res.send(newUser))
-    .catch(err => res.status(400).send(err.name + " : " + err.message));
+    .then(() => {
+      const token = newUser.generateJWTforUser();
+      res
+        .header("x-jwt", token)
+        .header("access-control-expose-headers", "x-jwt")
+        .send(newUser);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(400).send(err.name + " : " + err.message);
+    });
 });
 
 router.get("/:id", async (req, res) => {

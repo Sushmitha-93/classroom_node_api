@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const students = require("./routes/students");
 const users = require("./routes/users");
-const auth = require("./routes/auth");
+const login = require("./routes/loginAuth");
 const cors = require("cors");
 const config = require("config");
 
@@ -27,7 +27,7 @@ app.use(express.json()); // built-in middleware to parse JSON request payloads t
 // 2.1) Add the Routes here..
 app.use("/api/students", students);
 app.use("/api/users", users);
-app.use("/api/auth", auth);
+app.use("/api/login", login);
 
 // 3) Specify which port Listen for requests
 const port = process.env.PORT || 3000; // because port gets assigned dynamically by hosting service

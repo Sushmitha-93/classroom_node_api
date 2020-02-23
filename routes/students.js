@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router(); // remember to export this router
 const { Student, validateStudent } = require("../models/studentModel");
+const authMidware = require("../middlewares/authMidware");
 
-router.get("/", async (req, res) => {
+router.get("/", authMidware, async (req, res) => {
   const students = await Student.find();
   res.send(students);
 });

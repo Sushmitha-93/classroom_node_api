@@ -1,7 +1,3 @@
-const bcrypt = require('bcryptjs');
+const jwt = require("jsonwebtoken");
 
-bcrypt.genSalt(10, function(err, salt) {
-  bcrypt.hash("password", salt, function(err, hash) {
-    console.log(hash);
-  });
-});
+console.log(jwt.decode());

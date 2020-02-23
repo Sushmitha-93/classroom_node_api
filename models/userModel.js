@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
 const joi = require("@hapi/joi");
+const jwt = require("jsonwebtoken");
+const config = require("config");
 
 const userSchema = mongoose.Schema({
   username: {
     type: String,
-    required: true,
+    //required: true,
     minlength: 2,
     maxlength: 25
   },
@@ -23,6 +25,15 @@ const userSchema = mongoose.Schema({
   }
 });
 
+// this method can be called by any object of User model. which are returned on calling mongoose queries.
+userSchema.methods.generateJWTforUser = function() {
+  const token = jwt.sign(
+    { _id: this._id, username: this.username },
+    config.get("JWTSecretKey")
+  );
+  return token;
+};
+
 const User = mongoose.model("User", userSchema);
 
 // Joi validation for validating request
@@ -30,7 +41,7 @@ function validateUser(user) {
   const schema = joi.object({
     username: joi
       .string()
-      .required()
+      //.required()
       .min(2)
       .max(25),
     email: joi

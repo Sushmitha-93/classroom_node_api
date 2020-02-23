@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
   if (!validPassword) return res.status(400).send("Incorrect Password");
 
   // Generate JWT and send
-  const token = jwt.sign({ _id: user._id }, "**PrivateKey**");
+  const token = user.generateJWTforUser();
   return res.send(token);
 });
 
