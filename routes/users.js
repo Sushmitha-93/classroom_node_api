@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { User, validateUser } = require("../models/userModel");
 const bcrypt = require("bcryptjs");
+const authMidware=require("../middlewares/authMidware")
 
 router.get("/", async (req, res) => {
   const users = await User.find();
@@ -9,7 +10,7 @@ router.get("/", async (req, res) => {
 });
 
 // ** used for first time user SIGN UP requests **
-router.post("/", async (req, res) => {
+router.post("/",async (req, res) => {
   // 1) Validate request received
   const result = validateUser(req.body);
   if (result.error) return res.status(400).send("Invalid user information");
@@ -41,7 +42,7 @@ router.post("/", async (req, res) => {
     });
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id",authMidware, async (req, res) => {
   const user = await User.findById(req.params.id).catch(err => {
     res.status(400).send(err.name + " : " + err.message);
     console.log(err);
@@ -50,7 +51,7 @@ router.get("/:id", async (req, res) => {
   res.send(user);
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", authMidware,async (req, res) => {
   // Validate user request
   const result = validateUser(req.body);
   if (result.error) return res.status(400).send("Invalid request body");
@@ -81,7 +82,7 @@ router.put("/:id", async (req, res) => {
   res.send(updatedUser);
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",authMidware, async (req, res) => {
   const user = await User.findByIdAndDelete(req.params.id).catch(err =>
     res.status(400).send(err.name + " : " + err.message)
   );

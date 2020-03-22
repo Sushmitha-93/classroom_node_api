@@ -42,6 +42,7 @@ const studentSchema = mongoose.Schema({
   }
 });
 
+// Creating Mongoose object using whcih we can call CRUD functions of Mongoose
 const Student = mongoose.model("student", studentSchema);
 
 // Joi validation to validate request body

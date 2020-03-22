@@ -3,12 +3,12 @@ const router = express.Router(); // remember to export this router
 const { Student, validateStudent } = require("../models/studentModel");
 const authMidware = require("../middlewares/authMidware");
 
-router.get("/", authMidware, async (req, res) => {
+router.get("/", async (req, res) => {
   const students = await Student.find();
   res.send(students);
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id",authMidware, async (req, res) => {
   const student = await Student.findById(req.params.id).catch(err => {
     console.log(error);
     res.status(400).send(err.name + ": " + err.errmsg);
@@ -17,7 +17,7 @@ router.get("/:id", async (req, res) => {
   res.send(student);
 });
 
-router.post("/", async (req, res) => {
+router.post("/",authMidware, async (req, res) => {
   // validate request body
   // check if student roll id exists.. NOT NEEDED because unique property in mongoose schema gives error.
   // save in database
@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
     .catch(err => res.status(400).send(err.name + ": " + err.errmsg)); // Catches duplicate rollno errors
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id",authMidware, async (req, res) => {
   //validate student
   const result = validateStudent(req.body);
   if (result.error) return res.status(400).send("Invalid Student");
@@ -64,7 +64,7 @@ router.put("/:id", async (req, res) => {
   res.send(updatedStud);
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",authMidware, async (req, res) => {
   //check if id exists
   const student = await Student.findByIdAndDelete(req.params.id).catch(err => {
     console.log(err);

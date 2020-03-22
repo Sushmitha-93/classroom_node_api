@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { validateUser, User } = require("../models/userModel");
 
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs"); // To hash the password before saving it into DB
 const jwt = require("jsonwebtoken");
 
 router.post("/", async (req, res) => {
