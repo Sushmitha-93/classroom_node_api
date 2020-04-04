@@ -6,7 +6,7 @@ const joi = require("@hapi/joi");
 
 // 3)Validate using Joi
 
-const studentSchema = mongoose.Schema({
+const studentSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -15,7 +15,6 @@ const studentSchema = mongoose.Schema({
   },
   rollno: {
     type: Number,
-    unique: true,
     required: true,
     min: 1,
     max: 200
@@ -41,6 +40,8 @@ const studentSchema = mongoose.Schema({
     maxlength: 500
   }
 });
+
+//studentSchema.index({ rollno: 1, class: 1 }, { unique: true });
 
 // Creating Mongoose object using whcih we can call CRUD functions of Mongoose
 const Student = mongoose.model("student", studentSchema);
