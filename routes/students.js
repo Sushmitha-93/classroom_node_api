@@ -4,7 +4,7 @@ const { Student, validateStudent } = require("../models/studentModel");
 const authMidware = require("../middlewares/authMidware");
 
 router.get("/", async (req, res) => {
-  const students = await Student.find();
+  const students = await Student.find(req.query);
   res.send(students);
 });
 
