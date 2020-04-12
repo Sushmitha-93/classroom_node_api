@@ -3,19 +3,22 @@ const mongoose = require("mongoose");
 const testSchema = mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   class: {
     type: String,
-    required: true
+    required: true,
   },
   month: {
     type: String,
-    require: true
+    require: true,
   },
   subjects: {
-    type: Array
-  }
+    type: Array,
+  },
+  maxMarks: {
+    type: Number,
+  },
 });
 
 const Test = mongoose.model("Test", testSchema);

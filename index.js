@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const students = require("./routes/students");
-const studMarks = require("./routes/studentMarks");
 const users = require("./routes/users");
 const tests = require("./routes/tests");
 const login = require("./routes/loginAuth");
@@ -13,9 +12,9 @@ const db = config.get("db");
 
 mongoose
   //.connect("mongodb://localhost/classroom", { useNewUrlParser: true })
-  .connect(db, { useNewUrlParser: true })
+  .connect(db, { useNewUrlParser: true, useFindAndModify: false })
   .then(() => console.log("Connected to Mongo DB: ", db))
-  .catch(err => console.log("Could not connect to Mongo DB ", err));
+  .catch((err) => console.log("Could not connect to Mongo DB ", err));
 
 // 1) Create server instance
 const app = express();
@@ -30,8 +29,8 @@ app.use(
       "Content-Type",
       "X-Auth-Token",
       "Origin",
-      "Authorization"
-    ]
+      "Authorization",
+    ],
   })
 );
 
@@ -42,7 +41,6 @@ app.use("/api/students", students);
 app.use("/api/users", users);
 app.use("/api/login", login);
 app.use("/api/tests", tests);
-app.use("/api/studMarks", studMarks);
 
 // 3) Specify which port Listen for requests
 const port = process.env.PORT || 3000; // because port gets assigned dynamically by hosting service
