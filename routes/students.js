@@ -48,6 +48,41 @@ router.post("/", authMidware, async (req, res) => {
     .catch((err) => res.status(400).send(err.name + ": " + err.errmsg)); // Catches duplicate rollno errors
 });
 
+router.put("/marksSheet", async (req, res) => {
+  let setProperty = {};
+  let testScoreProperty = {};
+  setProperty["marksSheet.$.testScores." + req.body.subName] = req.body.marks;
+
+  // Update existing document using student _id and testId
+  let updateResult = await Student.updateOne(
+    {
+      _id: ObjectId(req.body.studId),
+      "marksSheet.testId": ObjectId(req.body.testId),
+    },
+    {
+      $set: setProperty,
+    }
+  );
+  console.log(updateResult);
+
+  // If not create push as new item to marksSheet item
+  if (updateResult.n === 0) {
+    testScoreProperty[req.body.subName] = req.body.marks;
+
+    updateResult = await Student.findByIdAndUpdate(req.body.studId, {
+      $push: {
+        marksSheet: {
+          testId: ObjectId(req.body.testId),
+          testName: req.body.testName,
+          testScores: testScoreProperty,
+        },
+      },
+    });
+  }
+
+  res.send(updateResult);
+});
+
 router.put("/:id", authMidware, async (req, res) => {
   //validate student
   const result = validateStudent(req.body);
@@ -70,48 +105,6 @@ router.put("/:id", authMidware, async (req, res) => {
     res.status(400).send(err.name + ": " + err.errmsg);
   });
   res.send(updatedStud);
-});
-
-router.put("/marksSheet/:id", async (req, res) => {
-  let setProperty = {};
-  let testScoreProperty = {};
-  setProperty["marksSheet.$.testScores." + req.body.subName] = req.body.marks;
-
-  // Update existing document using student _id and testId
-  let updateExisting = await Student.updateOne(
-    {
-      _id: ObjectId(req.params.id),
-      "marksSheet.testId": ObjectId(req.body.testId),
-    },
-    {
-      $set: setProperty,
-    }
-  );
-  console.log(updateExisting);
-
-  // If not create push as new item to marksSheet item
-  if (updateExisting.n === 0) {
-    testScoreProperty[req.body.subName] = req.body.marks;
-    Student.findByIdAndUpdate(
-      req.params.id,
-      {
-        $push: {
-          marksSheet: {
-            testId: ObjectId(req.body.testId),
-            testName: req.body.testName,
-            testScores: testScoreProperty,
-          },
-        },
-      },
-      function (error, success) {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log(success);
-        }
-      }
-    );
-  }
 });
 
 router.delete("/:id", authMidware, async (req, res) => {
