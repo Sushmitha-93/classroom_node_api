@@ -5,7 +5,15 @@ const testSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  class: {
+  branch: {
+    type: String,
+    required: true,
+  },
+  sem: {
+    type: Number,
+    require: true,
+  },
+  section: {
     type: String,
     required: true,
   },

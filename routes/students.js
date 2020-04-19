@@ -35,8 +35,10 @@ router.post("/", authMidware, async (req, res) => {
 
   let student = new Student({
     name: req.body.name,
-    rollno: req.body.rollno,
-    class: req.body.class,
+    branch: req.body.branch,
+    sem: req.body.sem,
+    section: req.body.section,
+    USN: req.body.USN,
     phone: req.body.phone,
     gender: req.body.gender,
     address: req.body.address,
@@ -86,7 +88,10 @@ router.put("/marksSheet", async (req, res) => {
 router.put("/:id", authMidware, async (req, res) => {
   //validate student
   const result = validateStudent(req.body);
-  if (result.error) return res.status(400).send("Invalid Student");
+  if (result.error) {
+    console.log(result.error);
+    return res.status(400).send("Invalid Student");
+  }
 
   //check if student exists
   let student = await Student.findById(req.params.id).catch((err) =>
@@ -96,8 +101,10 @@ router.put("/:id", authMidware, async (req, res) => {
 
   //update
   student.name = req.body.name;
-  if (student.rollno !== req.body.rollno) student.rollno = req.body.rollno;
-  student.class = req.body.class;
+  if (student.USN !== req.body.USN) student.USN = req.body.USN;
+  student.branch = req.body.branch;
+  student.sem = req.body.sem;
+  student.section = req.body.section;
   student.phone = req.body.phone;
   student.address = req.body.address;
   const updatedStud = await student.save().catch((err) => {

@@ -13,17 +13,27 @@ const studentSchema = new mongoose.Schema({
     minlength: 2,
     maxlength: 25,
   },
-  rollno: {
+  branch: {
+    type: String,
+    required: true,
+    maxlength: 50,
+  },
+  sem: {
     type: Number,
     required: true,
     min: 1,
-    max: 200,
+    max: 8,
   },
-  class: {
+  section: {
     type: String,
     required: true,
-    minlength: 2,
-    maxlength: 3,
+    minlength: 1,
+    maxlength: 1,
+  },
+  USN: {
+    type: String,
+    required: true,
+    maxlength: 10,
   },
   phone: {
     type: String,
@@ -63,8 +73,10 @@ const Student = mongoose.model("student", studentSchema);
 function validateStudent(student) {
   const schema = joi.object({
     name: joi.string().required().min(2).max(25),
-    rollno: joi.number().min(1).max(200).required(),
-    class: joi.string().min(2).max(3),
+    branch: joi.string().max(50).required(),
+    sem: joi.number().min(1).max(8).required(),
+    section: joi.string().min(1).max(1),
+    USN: joi.string().max(10).required(),
     phone: joi.string().length(10).required(),
     gender: joi.string().required(),
     address: joi.string().max(500),

@@ -14,22 +14,24 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   let test = new Test({
     name: req.body.name,
-    class: req.body.class,
+    branch: req.body.branch,
+    sem: req.body.sem,
+    section: req.body.section,
     month: req.body.month,
-    subjects: req.body.subjects ? req.body.subjects : []
+    subjects: req.body.subjects ? req.body.subjects : [],
   });
 
   test = await test
     .save()
     .then(() => res.send(test))
-    .catch(err => res.status(400).send(err.name + ": " + err.errmsg)); // Catches insertion errors
+    .catch((err) => res.status(400).send(err.name + ": " + err.errmsg)); // Catches insertion errors
 });
 
 router.put("/:id", async (req, res) => {
   console.log(Object.keys(req.body));
 
   //Find test id
-  let test = await Test.findById(req.params.id).catch(err => {
+  let test = await Test.findById(req.params.id).catch((err) => {
     console.log(err);
     res.status(400).send(err.name + ": " + err.errmsg);
   });
@@ -38,7 +40,7 @@ router.put("/:id", async (req, res) => {
   //Update Test with whatever property sent in request body keeping the rest same
   const result = await Test.where({ _id: req.params.id })
     .updateOne(req.body)
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(400).send(err.name + ": " + err.errmsg);
     });

@@ -4,6 +4,9 @@ const students = require("./routes/students");
 const users = require("./routes/users");
 const tests = require("./routes/tests");
 const login = require("./routes/loginAuth");
+const branches = require("./routes/branches");
+const syllabus = require("./routes/syllabus");
+
 const cors = require("cors");
 const config = require("config");
 
@@ -41,6 +44,8 @@ app.use("/api/students", students);
 app.use("/api/users", users);
 app.use("/api/login", login);
 app.use("/api/tests", tests);
+app.use("/api/branches", branches);
+app.use("/api/syllabus", syllabus);
 
 // 3) Specify which port Listen for requests
 const port = process.env.PORT || 3000; // because port gets assigned dynamically by hosting service
