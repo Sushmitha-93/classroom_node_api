@@ -12,7 +12,15 @@ const teacherSchema = new mongoose.Schema({
   },
   branch: {
     type: String,
-    maxlength: 10,
+    maxlength: 100,
+  },
+  designation: {
+    type: String,
+    maxlength: 25,
+  },
+  gender: {
+    type: String,
+    requiredPaths: true,
   },
   phone: {
     type: String,
@@ -23,22 +31,16 @@ const teacherSchema = new mongoose.Schema({
     type: String,
     maxlength: 50,
   },
-  subjects: [
+  classes: [
     {
-      subName: {
-        type: String,
-      },
-      classes: [
-        {
-          branch: String,
-          sem: Number,
-          section: String,
-        },
-      ],
+      branch: String,
+      sem: Number,
+      section: String,
+      subName: String,
     },
   ],
 });
 
-const Teacher = mongoose.model("Teacher", teacherSchema);
+const Teacher = mongoose.model("teacher", teacherSchema);
 
 exports.Teacher = Teacher;
