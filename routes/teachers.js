@@ -45,4 +45,31 @@ router.post("/", async (req, res) => {
     });
 });
 
+router.put("/:id", async (req, res) => {
+  // Check if teacher exist
+  console.log(req.params.id);
+  let teacher = await Teacher.findById(req.params.id).catch((err) =>
+    console.log(err)
+  );
+  if (!teacher) res.status(404).send("Teacher does not exist");
+
+  // Update teacher
+  teacher.name = req.body.name;
+  teacher.tid = req.body.tid;
+  teacher.phone = req.body.phone;
+  teacher.designation = req.body.designation;
+  teacher.address = req.body.address;
+  teacher.classes = req.body.classes;
+  teacher.subject = req.body.subject;
+  teacher.branch = req.body.branch;
+  teacher.gender = req.body.gender;
+
+  // call save to update above teacher object
+  const updatedTeacher = await teacher.save().catch((err) => {
+    console.log(err);
+    res.status(400).send(err);
+  });
+  res.send(updatedTeacher);
+});
+
 module.exports = router;
