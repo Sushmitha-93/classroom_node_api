@@ -4,7 +4,7 @@ const joi = require("@hapi/joi");
 // 1)Create mongoose schema
 // 2)Create mongoose model
 
-// 3)Validate using Joi
+// 3)Validate function using Joi
 
 const studentSchema = new mongoose.Schema({
   name: {

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { User, validateUser } = require("../models/userModel");
 const bcrypt = require("bcryptjs");
-const authMidware=require("../middlewares/authMidware")
+const authMidware = require("../middlewares/authMidware");
 
 router.get("/", async (req, res) => {
   const users = await User.find();
@@ -10,21 +10,21 @@ router.get("/", async (req, res) => {
 });
 
 // ** used for first time user SIGN UP requests **
-router.post("/",async (req, res) => {
-  // 1) Validate request received
+router.post("/", async (req, res) => {
+  // 1) Validate request structure received
   const result = validateUser(req.body);
   if (result.error) return res.status(400).send("Invalid user information");
 
   let newUser = new User({
     username: req.body.username,
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
   });
   // 2) Hashing password before saving in db
   const salt = await bcrypt.genSalt(10);
   newUser.password = await bcrypt.hash(newUser.password, salt); // returns hashed password
 
-  // 3) Save/insert new user in db 
+  // 3) Save/insert new user in db
   //      if save OK - send JWT taken in response Header, and new user saved in response Body
   //      else send 400 error - (because user already exist)
   newUser = await newUser
@@ -36,14 +36,14 @@ router.post("/",async (req, res) => {
         .header("access-control-expose-headers", "x-jwt")
         .send(newUser);
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(400).send(err.name + " : " + err.message);
     });
 });
 
-router.get("/:id",authMidware, async (req, res) => {
-  const user = await User.findById(req.params.id).catch(err => {
+router.get("/:id", authMidware, async (req, res) => {
+  const user = await User.findById(req.params.id).catch((err) => {
     res.status(400).send(err.name + " : " + err.message);
     console.log(err);
   });
@@ -51,13 +51,13 @@ router.get("/:id",authMidware, async (req, res) => {
   res.send(user);
 });
 
-router.put("/:id", authMidware,async (req, res) => {
+router.put("/:id", authMidware, async (req, res) => {
   // Validate user request
   const result = validateUser(req.body);
   if (result.error) return res.status(400).send("Invalid request body");
 
   // if user exist
-  let user = await User.findById(req.params.id).catch(err =>
+  let user = await User.findById(req.params.id).catch((err) =>
     res.status(400).send(err.name + " : " + err.message)
   );
   if (!user) return res.status(400).send("User does not exist");
@@ -75,15 +75,15 @@ router.put("/:id", authMidware,async (req, res) => {
     user.password = await bcrypt.hash(req.body.password, salt);
     console.log(user.password);
   }
-  const updatedUser = await user.save().catch(err => {
+  const updatedUser = await user.save().catch((err) => {
     console.log(err);
     res.status(500).send(err.name + " : " + err.message);
   });
   res.send(updatedUser);
 });
 
-router.delete("/:id",authMidware, async (req, res) => {
-  const user = await User.findByIdAndDelete(req.params.id).catch(err =>
+router.delete("/:id", authMidware, async (req, res) => {
+  const user = await User.findByIdAndDelete(req.params.id).catch((err) =>
     res.status(400).send(err.name + " : " + err.message)
   );
   // it returns null if user doesnt exist
